@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Encryption Algorithms</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.2.1/jsencrypt.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <i class="fas fa-lock"></i> Encryption Algorithms
+        </h1>
+        <p class="subtitle">
+          This website allows you to experiment with encryption and decryption
+          operations using the most popular algorithms used in cybersecurity.
+          Choose an algorithm and start experimenting.
+        </p>
+      </header>
+
+      <div class="main-content">
+        <section class="algorithms-section">
+          <h2 class="section-title">
+            <i class="fas fa-project-diagram"></i> Choose Encryption Algorithm
+          </h2>
+
+          <div class="algorithms-grid">
+            <div class="algorithm-card active" data-algorithm="playfair">
+              <div class="algorithm-icon">
+                <i class="fas fa-chess-board"></i>
+              </div>
+              <div class="algorithm-name">Playfair</div>
+              <div class="algorithm-desc">
+                Bigram substitution cipher algorithm
+              </div>
+            </div>
+
+            <div class="algorithm-card" data-algorithm="rsa">
+              <div class="algorithm-icon">
+                <i class="fas fa-key"></i>
+              </div>
+              <div class="algorithm-name">RSA</div>
+              <div class="algorithm-desc">Public key encryption algorithm</div>
+            </div>
+
+            <div class="algorithm-card" data-algorithm="aes">
+              <div class="algorithm-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="algorithm-name">AES</div>
+              <div class="algorithm-desc">Advanced Encryption Standard</div>
+            </div>
+
+            <div class="algorithm-card" data-algorithm="des">
+              <div class="algorithm-icon">
+                <i class="fas fa-unlock-alt"></i>
+              </div>
+              <div class="algorithm-name">DES</div>
+              <div class="algorithm-desc">Previous encryption standard</div>
+            </div>
+          </div>
+
+          <h2 class="section-title">
+            <i class="fas fa-cogs"></i> Choose Operation Type
+          </h2>
+
+          <div class="action-buttons">
+            <button class="action-btn encrypt-btn active" data-action="encrypt">
+              <i class="fas fa-lock"></i> Encrypt
+            </button>
+            <button class="action-btn decrypt-btn" data-action="decrypt">
+              <i class="fas fa-unlock"></i> Decrypt
+            </button>
+          </div>
+
+          <div class="algorithm-info" id="algorithm-info">
+            <p>
+              <strong>Playfair:</strong> A classic encryption algorithm based on
+              a 5x5 matrix containing the encryption key. It encrypts pairs of
+              letters (bigrams) instead of single letters.
+            </p>
+          </div>
+        </section>
+
+        <section class="io-section">
+          <h2 class="section-title">
+            <i class="fas fa-edit"></i> Enter Required Data
+          </h2>
+
+          <div class="input-group">
+            <label for="input-text" id="input-label">Plaintext</label>
+            <textarea
+              id="input-text"
+              placeholder="Enter the text you want to encrypt here..."
+            ></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="key">Key</label>
+            <input
+              type="text"
+              id="key"
+              placeholder="Enter encryption key here..."
+            />
+          </div>
+
+          <button class="process-btn" id="process-btn">
+            <i class="fas fa-play-circle"></i> Execute Encryption Operation
+          </button>
+
+          <div class="result-container">
+            <div class="result-title">Result</div>
+            <div id="result">
+              The result will appear here after executing the operation...
+            </div>
+          </div>
+
+          <div class="algorithm-info">
+            <p>
+              <strong>Note:</strong> For demonstration purposes, some algorithms
+              may use simplified implementations. In real applications,
+              certified security libraries should be used.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <footer>
+        <p>
+          Eng : Masyu Magdy
+        </p>
+        <p>
+          Eng : Abdullah Ashraf 
+        </p>
+        <p>
+          Eng : Tarek Alaa
+        </p>
+      </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="./js/index.js"></script>
+  </body>
+</html>
