@@ -596,86 +596,68 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // DES Implementation - Direct and simple
+
   function desEncrypt(text, key) {
-    // Prepare inputs
-    const plaintext = text.toLowerCase();
+    let textHex;
+    if (/^[0-9a-f]+$/i.test(text)) {
+      textHex = text.toLowerCase();
+    } else {
+      textHex = CryptoJS.enc.Utf8.parse(text).toString(CryptoJS.enc.Hex);
+    }
+
     const keyStr = key.toLowerCase();
 
-    // Validate key
     if (!/^[0-9a-f]{16}$/.test(keyStr) && keyStr.length !== 8) {
       throw new Error("DES key must be 16 hex digits or 8 characters");
     }
 
-    // Convert key to hex if needed
     let keyHex = keyStr;
     if (keyStr.length === 8) {
       keyHex = "";
       for (let i = 0; i < 8; i++) {
-        keyHex += keyStr.charCodeAt(i).toString(16);
+        keyHex += keyStr.charCodeAt(i).toString(16).padStart(2, "0");
       }
     }
 
-    // Validate plaintext
-    if (!/^[0-9a-f]+$/.test(plaintext)) {
-      throw new Error("Plaintext must be in hexadecimal format");
+    if (textHex.length % 16 !== 0) {
+      textHex = textHex.padEnd(Math.ceil(textHex.length / 16) * 16, "0");
     }
 
-    // Pad plaintext if needed
-    let paddedPlaintext = plaintext;
-    while (paddedPlaintext.length % 16 !== 0) {
-      paddedPlaintext += "0";
-    }
-
-    // Convert to CryptoJS format
     const keyParsed = CryptoJS.enc.Hex.parse(keyHex);
-    const plaintextParsed = CryptoJS.enc.Hex.parse(paddedPlaintext);
+    const textParsed = CryptoJS.enc.Hex.parse(textHex);
 
-    // Encrypt
-    const encrypted = CryptoJS.DES.encrypt(plaintextParsed, keyParsed, {
+    const encrypted = CryptoJS.DES.encrypt(textParsed, keyParsed, {
       mode: CryptoJS.mode.ECB,
       padding: CryptoJS.pad.NoPadding,
     });
 
-    // Convert to hex string
-    const ciphertext = encrypted.ciphertext;
-    let result = "";
-
-    for (let i = 0; i < ciphertext.sigBytes; i++) {
-      const byte = ciphertext.words[i >>> 2] >>> (24 - (i % 4) * 8);
-      result += (byte & 0xff).toString(16).padStart(2, "0");
-    }
-
-    return result;
+    return encrypted.ciphertext.toString();
   }
 
   function desDecrypt(ciphertext, key) {
-    // Similar implementation for decryption
-    const cipher = ciphertext.toLowerCase();
+    if (!/^[0-9a-f]+$/i.test(ciphertext)) {
+      throw new Error("Ciphertext must be in hexadecimal format");
+    }
+
     const keyStr = key.toLowerCase();
 
     if (!/^[0-9a-f]{16}$/.test(keyStr) && keyStr.length !== 8) {
       throw new Error("DES key must be 16 hex digits or 8 characters");
     }
 
-    if (!/^[0-9a-f]+$/.test(cipher)) {
-      throw new Error("Ciphertext must be in hexadecimal format");
-    }
-
     let keyHex = keyStr;
     if (keyStr.length === 8) {
       keyHex = "";
       for (let i = 0; i < 8; i++) {
-        keyHex += keyStr.charCodeAt(i).toString(16);
+        keyHex += keyStr.charCodeAt(i).toString(16).padStart(2, "0");
       }
     }
 
     const keyParsed = CryptoJS.enc.Hex.parse(keyHex);
-    const cipherParsed = CryptoJS.enc.Hex.parse(cipher);
+    const cipherParsed = CryptoJS.enc.Hex.parse(ciphertext);
 
     const decrypted = CryptoJS.DES.decrypt(
-      {
-        ciphertext: cipherParsed,
-      },
+      { ciphertext: cipherParsed },
       keyParsed,
       {
         mode: CryptoJS.mode.ECB,
@@ -683,18 +665,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     );
 
-    let result = "";
-    const words = decrypted.words;
-    const sigBytes = decrypted.sigBytes;
-
-    for (let i = 0; i < sigBytes; i++) {
-      const byte = words[i >>> 2] >>> (24 - (i % 4) * 8);
-      result += (byte & 0xff).toString(16).padStart(2, "0");
-    }
-
-    return result;
+    return decrypted.toString(CryptoJS.enc.Utf8).replace(/\0+$/, "");
   }
 
-  // Initialize process button text
   updateProcessButton();
 });
